@@ -14,7 +14,25 @@ MyScribe is a simple and elegant Django web application designed for **writing a
 
 ---
 
-## Tech Stack
+## Tech StackUsage
+
+On the home page, select whether you want to:
+
+Generate a password
+
+View saved passwords
+
+If generating:
+
+Enter the application/service name
+
+Select password options (length, character types)
+
+Click Generate Password
+
+Copy or save the password using the buttons provided.
+
+View all saved passwords under the password list section.
 
 - **Backend:** Django
 - **Frontend:** Django Templates, HTML, CSS
@@ -28,7 +46,7 @@ MyScribe is a simple and elegant Django web application designed for **writing a
 
 1. **Clone the repository**
 ```bash
-git clone https://github.com/yourusername/MyScribe.git
+git clone https://github.com/RynVarkh/MyScribe.git
 cd MyScribe
 ```
 

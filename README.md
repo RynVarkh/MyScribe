@@ -47,14 +47,12 @@ poetry install
 poetry run python manage.py migrate
 ```
 
-**Run Development server**
+## **Run Development server**
 ```bash
 python manage.py runserver
 ```
 
-## OR
-
-**Run Production server with Gunicorn**
+## **Run Production server with Gunicorn**
 ```bash
 poetry run gunicorn MyScribe.wsgi:application --bind 0.0.0.0:8000
 ```

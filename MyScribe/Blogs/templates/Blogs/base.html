@@ -1,0 +1,155 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}MyScribe{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'images/pen-tool.png' %}">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <header class="bg-gradient-to-r from-gray-900 to-black shadow-lg">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between items-center py-4">
+                <!-- Logo -->
+                <div class="flex items-center space-x-3">
+                    <div class="bg-blue-500 p-2 rounded-lg">
+                        <i class="fas fa-pen-nib text-white text-xl"></i>
+                    </div>
+                    <a href="{% url 'Blogs:home' %}" class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent hover:from-purple-500 hover:to-blue-400 transition-all duration-300">
+                        MyScribe
+                    </a>
+                </div>
+
+                <!-- Enhanced Navigation -->
+                <nav class="flex items-center space-x-4">
+                    <!-- Dashboard -->
+                    <a href="{% url 'Blogs:home' %}" 
+                    class="group relative flex items-center space-x-2 text-gray-300 hover:text-white transition-all duration-300 px-4 py-3 rounded-xl hover:bg-gray-800/80 border border-transparent hover:border-gray-700">
+                        <div class="relative">
+                            <i class="fas fa-th-large text-sm"></i>
+                            <div class="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <span class="font-semibold">Dashboard</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    
+                    <!-- Compose - Primary CTA -->
+                    <a href="{% url 'Blogs:create' %}" 
+                    class="group relative flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-5 py-3 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:-translate-y-1 shadow-2xl hover:shadow-blue-500/30 border border-blue-500/30">
+                        <div class="relative">
+                            <i class="fas fa-plus text-sm"></i>
+                            <div class="absolute -inset-1 bg-white/20 rounded-full blur-sm group-hover:blur-md transition-all duration-300 opacity-0 group-hover:opacity-100"></div>
+                        </div>
+                        <span class="font-semibold">Compose</span>
+                        <div class="absolute inset-0 bg-white/5 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    
+                    <!-- Edit -->
+                    <a href="{% url 'Blogs:update' %}" 
+                    class="group relative flex items-center space-x-2 text-gray-300 hover:text-white transition-all duration-300 px-4 py-3 rounded-xl hover:bg-gray-800/80 border border-transparent hover:border-gray-700">
+                        <div class="relative">
+                            <i class="fas fa-edit text-sm"></i>
+                            <div class="absolute -top-1 -right-1 w-2 h-2 bg-green-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <span class="font-semibold">Edit</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-green-500/10 to-blue-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    
+                    <!-- Trash -->
+                    <a href="{% url 'Blogs:delete' %}" 
+                    class="group relative flex items-center space-x-2 text-gray-300 hover:text-red-300 transition-all duration-300 px-4 py-3 rounded-xl hover:bg-red-500/10 border border-transparent hover:border-red-500/30">
+                        <div class="relative">
+                            <i class="fas fa-trash text-sm"></i>
+                            <div class="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        </div>
+                        <span class="font-semibold">Trash</span>
+                        <div class="absolute inset-0 bg-gradient-to-r from-red-500/10 to-pink-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                    
+                    <!-- User Profile -->
+                    <a href="{% url 'Auth:profile' %}" 
+                    class="group relative flex items-center space-x-3 bg-gray-800/50 text-gray-300 hover:text-white transition-all duration-300 px-4 py-3 rounded-xl hover:bg-gray-700 border border-gray-700 hover:border-purple-500/50">
+                        <div class="relative">
+                            <div class="w-8 h-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-sm font-bold">
+                                {{ user.username|first|upper }}
+                            </div>
+                            <div class="absolute -bottom-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-900"></div>
+                        </div>
+                        <div class="flex flex-col items-start">
+                            <span class="font-semibold text-sm">{{ user.username }}</span>
+                        </div>
+                        <div class="absolute inset-0 bg-gradient-to-r from-purple-500/10 to-pink-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </a>
+                </nav>
+            </div>
+        </div>
+        {% if messages %}
+                <div class="messages space-y-2 mt-4">
+                    {% for message in messages %}
+                    <div 
+                        class="
+                        px-4 py-3 rounded-lg shadow-sm text-sm font-medium 
+                        {% if message.tags == 'success' %} bg-green-100 text-green-700 border-l-4 border-green-500 
+                        {% elif message.tags == 'error' %} bg-red-100 text-red-700 border-l-4 border-red-500 
+                        {% elif message.tags == 'warning' %} bg-yellow-100 text-yellow-800 border-l-4 border-yellow-500 
+                        {% elif message.tags == 'info' %} bg-blue-100 text-blue-700 border-l-4 border-blue-500 
+                        {% else %} bg-gray-100 text-gray-700 border-l-4 border-gray-400 
+                        {% endif %}
+                        ">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+        {% endif %}
+    </header>
+
+    <main class="flex-1 container mx-auto px-4 py-8">
+        <!-- Optional: Breadcrumb or page title block -->
+        {% block breadcrumb %}{% endblock %}
+        
+        <!-- Content block -->
+        <div class="max-w-6xl mx-auto">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white mt-auto">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-3 mb-4 md:mb-0">
+                    <div class="bg-blue-500 p-2 rounded-lg">
+                        <i class="fas fa-pen-nib text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold text-gray-300">MyScribe</span>
+                </div>
+                <div class="text-gray-400 text-center md:text-right">
+                    <p class="text-sm">&copy; 2025 MyScribe. All rights reserved.</p>
+                    <p class="text-xs mt-1">Your personal blogging companion</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Optional: JavaScript for interactive elements -->
+    <script>
+        // Add smooth scrolling and other interactive features
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add hover effects programmatically if needed
+            const navLinks = document.querySelectorAll('nav a');
+            navLinks.forEach(link => {
+                link.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                link.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

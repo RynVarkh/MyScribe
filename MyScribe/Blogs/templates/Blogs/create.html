@@ -1,0 +1,217 @@
+{% extends 'Blogs/base.html' %}
+{% load widget_tweaks %}
+{% block title %}Compose | MyScribe{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Page Header -->
+    <div class="mb-8 text-center">
+        <h1 class="text-4xl font-bold text-gray-900 mb-3">Compose New Blog</h1>
+        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Share your thoughts, stories, and ideas with the world. Write from your heart.
+        </p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Form Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
+            <div class="flex items-center space-x-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Create Your Masterpiece</h2>
+                    <p class="text-blue-100 mt-1">Fill in the details below to publish your blog</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Blog Form -->
+        <form method="POST" class="p-8 space-y-8">
+            {% csrf_token %}
+
+            <!-- Title Field -->
+            <div class="space-y-3">
+                <label for="{{ form.title.id_for_label }}" class="block text-lg font-semibold text-gray-800 flex items-center space-x-2">
+                    <i class="fas fa-heading text-blue-500 text-lg"></i>
+                    <span>Blog Title</span>
+                </label>
+                <div class="relative">
+                    {{ form.title|attr:"class:w-full border-2 border-gray-200 rounded-xl p-4 text-lg font-medium focus:outline-none focus:border-blue-500 focus:ring-4 focus:ring-blue-100 transition-all duration-200 placeholder-gray-400"|attr:"placeholder:Enter a captivating title for your blog..." }}
+                    <div class="absolute right-4 top-4 text-gray-400">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                {% if form.title.errors %}
+                    <div class="flex items-center space-x-2 text-red-500 text-sm mt-2">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.title.errors }}</span>
+                    </div>
+                {% endif %}
+                <p class="text-sm text-gray-500">Make it engaging and descriptive to attract readers</p>
+            </div>
+
+            <!-- Body Field -->
+            <div class="space-y-3">
+                <label for="{{ form.body.id_for_label }}" class="block text-lg font-semibold text-gray-800 flex items-center space-x-2">
+                    <i class="fas fa-align-left text-green-500 text-lg"></i>
+                    <span>Blog Content</span>
+                </label>
+            <div class="relative">
+                <div 
+                    id="richEditor"
+                    class="w-full border-2 border-gray-200 rounded-xl p-4 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-200 placeholder-gray-400 min-h-20 max-h-96 overflow-y-auto whitespace-pre-wrap"
+                    contenteditable="true"
+                    data-placeholder="Write your amazing content here..."
+                >{{ form.instance.body|default:"" }}</div>
+                <input type="hidden" id="{{ form.body.id_for_label }}" name="{{ form.body.name }}" value="{{ form.instance.body|default:'' }}">
+                <div class="absolute right-4 top-4 text-gray-400">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+            </div>
+                {% if form.body.errors %}
+                    <div class="flex items-center space-x-2 text-red-500 text-sm mt-2">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.body.errors }}</span>
+                    </div>
+                {% endif %}
+                <div class="flex justify-between items-center text-sm text-gray-500">
+                    <span>Write from your heart. Be authentic and engaging.</span>
+                    <span id="wordCount">0 words</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button type="submit" class="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3 group">
+                    <i class="fas fa-paper-plane group-hover:rotate-12 transition-transform duration-200"></i>
+                    <span class="text-lg">Publish Blog</span>
+                </button>
+                
+                <a href="{% url 'Blogs:home' %}" class="flex-1 bg-gray-100 text-gray-700 font-semibold py-4 px-6 rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent hover:border-gray-300 flex items-center justify-center space-x-3">
+                    <i class="fas fa-times"></i>
+                    <span class="text-lg">Cancel</span>
+                </a>
+            </div>
+        </form>
+
+        <!-- Writing Tips -->
+        <div class="bg-gray-50 border-t border-gray-200 px-8 py-6">
+            <h3 class="font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+                <i class="fas fa-lightbulb text-yellow-500"></i>
+                <span>Writing Tips</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Start with a compelling introduction</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Use short paragraphs for readability</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Include personal stories and examples</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>End with a strong conclusion</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Word Count Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bodyField = document.getElementById('{{ form.body.id_for_label }}');
+    const wordCountElement = document.getElementById('wordCount');
+    
+    function updateWordCount() {
+        const text = bodyField.value;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        wordCountElement.textContent = `${words} words`;
+        
+        // Change color based on word count
+        if (words < 50) {
+            wordCountElement.className = 'text-red-500 font-medium';
+        } else if (words < 200) {
+            wordCountElement.className = 'text-yellow-500 font-medium';
+        } else {
+            wordCountElement.className = 'text-green-500 font-medium';
+        }
+    }
+    
+    bodyField.addEventListener('input', updateWordCount);
+    updateWordCount(); // Initial count
+    
+    // Add some interactive effects
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('ring-2', 'ring-blue-200', 'rounded-xl');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('ring-2', 'ring-blue-200', 'rounded-xl');
+        });
+    });
+});
+document.addEventListener('DOMContentLoaded', function() {
+    const editor = document.getElementById('richEditor');
+    const hiddenInput = document.getElementById('{{ form.body.id_for_label }}');
+    
+    // Sync content to hidden input
+    editor.addEventListener('input', function() {
+        hiddenInput.value = this.textContent || this.innerText;
+        
+        // Auto-resize
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 384) + 'px';
+    });
+    
+    // Handle placeholder
+    editor.addEventListener('focus', function() {
+        if (this.textContent === this.getAttribute('data-placeholder')) {
+            this.textContent = '';
+        }
+    });
+    
+    editor.addEventListener('blur', function() {
+        if (!this.textContent.trim()) {
+            this.textContent = this.getAttribute('data-placeholder');
+        }
+    });
+    
+    // Initialize
+    if (!editor.textContent.trim()) {
+        editor.textContent = editor.getAttribute('data-placeholder');
+    }
+});
+</script>
+
+<style>
+.min-h-64 {
+    min-height: 16rem;
+}
+
+.resize-y {
+    resize: vertical;
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, textarea {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Custom focus styles */
+input:focus, textarea:focus {
+    transform: translateY(-1px);
+}
+
+/* Force textarea content to start from top */
+textarea {
+    vertical-align: top !important;
+    text-align: start !important;
+}
+</style>
+{% endblock %}

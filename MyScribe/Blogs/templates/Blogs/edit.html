@@ -1,0 +1,267 @@
+{% extends 'Blogs/base.html' %}
+{% load static %}
+{% load widget_tweaks %}
+
+{% block title %}
+    Edit | MyScribe
+{% endblock title %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <div class="flex items-center space-x-4 mb-4">
+            <a href="{% url 'Blogs:details' form.instance.id %}" class="bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center space-x-2">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Post</span>
+            </a>
+            <div class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium">
+                <i class="fas fa-edit mr-2"></i>
+                Editing Mode
+            </div>
+        </div>
+        
+        <h1 class="text-4xl font-bold text-gray-900 mb-3">Edit Blog Post</h1>
+        <p class="text-lg text-gray-600">
+            Refine and improve your existing content. Make it even better!
+        </p>
+    </div>
+
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+        <!-- Form Header -->
+        <div class="bg-gradient-to-r from-yellow-500 to-orange-500 px-8 py-6">
+            <div class="flex items-center space-x-4">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">Editing: "{{ form.instance.title }}"</h2>
+                    <p class="text-yellow-100 mt-1">Originally created {{ form.instance.created_at|timesince }} ago</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Form -->
+        <form method="POST" class="p-8 space-y-8">
+            {% csrf_token %}
+
+            <!-- Title Field -->
+            <div class="space-y-3">
+                <label for="{{ form.title.id_for_label }}" class="block text-lg font-semibold text-gray-800 flex items-center space-x-2">
+                    <i class="fas fa-heading text-yellow-500 text-lg"></i>
+                    <span>Blog Title</span>
+                </label>
+                <div class="relative">
+                    {{ form.title|attr:"class:w-full border-2 border-gray-200 rounded-xl p-4 text-lg font-medium focus:outline-none focus:border-yellow-500 focus:ring-4 focus:ring-yellow-100 transition-all duration-200 placeholder-gray-400"|attr:"placeholder:Enter a captivating title for your blog..." }}
+                    <div class="absolute right-4 top-4 text-gray-400">
+                        <i class="fas fa-edit"></i>
+                    </div>
+                </div>
+                {% if form.title.errors %}
+                    <div class="flex items-center space-x-2 text-red-500 text-sm mt-2">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.title.errors }}</span>
+                    </div>
+                {% endif %}
+            </div>
+
+            <!-- Body Field -->
+            <div class="space-y-3">
+                <label for="{{ form.body.id_for_label }}" class="block text-lg font-semibold text-gray-800 flex items-center space-x-2">
+                    <i class="fas fa-align-left text-orange-500 text-lg"></i>
+                    <span>Blog Content</span>
+                </label>
+            <div class="relative">
+                <div 
+                    id="richEditor"
+                    class="w-full border-2 border-gray-200 rounded-xl p-4 focus:outline-none focus:border-orange-500 focus:ring-4 focus:ring-orange-100 transition-all duration-200 placeholder-gray-400 min-h-20 max-h-96 overflow-y-auto whitespace-pre-wrap"
+                    contenteditable="true"
+                    data-placeholder="Write your amazing content here..."
+                >{{ form.instance.body|default:"" }}</div>
+                <input type="hidden" id="{{ form.body.id_for_label }}" name="{{ form.body.name }}" value="{{ form.instance.body|default:'' }}">
+                <div class="absolute right-4 top-4 text-gray-400">
+                    <i class="fas fa-pencil-alt"></i>
+                </div>
+            </div>
+                {% if form.body.errors %}
+                    <div class="flex items-center space-x-2 text-red-500 text-sm mt-2">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span>{{ form.body.errors }}</span>
+                    </div>
+                {% endif %}
+                <div class="flex justify-between items-center text-sm text-gray-500">
+                    <span>Refine your content. Every edit makes it better.</span>
+                    <span id="wordCount">0 words</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <button type="submit" class="flex-1 bg-gradient-to-r from-yellow-500 to-orange-500 text-white font-bold py-4 px-6 rounded-xl hover:from-yellow-600 hover:to-orange-600 transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl flex items-center justify-center space-x-3 group">
+                    <i class="fas fa-save group-hover:rotate-12 transition-transform duration-200"></i>
+                    <span class="text-lg">Update Blog</span>
+                </button>
+                
+                <a href="{% url 'Blogs:details' form.instance.id %}" class="flex-1 bg-gray-100 text-gray-700 font-semibold py-4 px-6 rounded-xl hover:bg-gray-200 transition-all duration-200 border-2 border-transparent hover:border-gray-300 flex items-center justify-center space-x-3">
+                    <i class="fas fa-times"></i>
+                    <span class="text-lg">Cancel</span>
+                </a>
+                
+                <!-- Preview Button -->
+                <a href="{% url 'Blogs:details' form.instance.id %}" target="_blank" class="flex-1 bg-blue-100 text-blue-700 font-semibold py-4 px-6 rounded-xl hover:bg-blue-200 transition-all duration-200 border-2 border-transparent hover:border-blue-300 flex items-center justify-center space-x-3">
+                    <i class="fas fa-eye"></i>
+                    <span class="text-lg">Preview</span>
+                </a>
+            </div>
+        </form>
+
+        <!-- Editing Stats -->
+        <div class="bg-gray-50 border-t border-gray-200 px-8 py-6">
+            <h3 class="font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+                <i class="fas fa-chart-bar text-purple-500"></i>
+                <span>Editing Statistics</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+                <div class="bg-white rounded-lg p-4 shadow-sm border">
+                    <div class="text-gray-500 mb-1">Original Creation</div>
+                    <div class="font-semibold text-gray-800">{{ form.instance.created_at|date:"M d, Y" }}</div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow-sm border">
+                    <div class="text-gray-500 mb-1">Last Updated</div>
+                    <div class="font-semibold text-gray-800">
+                        {% if form.instance.updated_at %}
+                            {{ form.instance.updated_at|date:"M d, Y" }}
+                        {% else %}
+                            Never
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg p-4 shadow-sm border">
+                    <div class="text-gray-500 mb-1">Word Count</div>
+                    <div class="font-semibold text-gray-800" id="currentWordCount">
+                        {{ form.instance.body|wordcount }} words
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Editing Tips -->
+        <div class="bg-yellow-50 border-t border-yellow-200 px-8 py-6">
+            <h3 class="font-semibold text-gray-800 mb-4 flex items-center space-x-2">
+                <i class="fas fa-lightbulb text-yellow-500"></i>
+                <span>Editing Tips</span>
+            </h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-gray-600">
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Check for grammar and spelling errors</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Improve clarity and readability</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Update outdated information</span>
+                </div>
+                <div class="flex items-start space-x-3">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Enhance with new insights</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Word Count Script -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const bodyField = document.getElementById('{{ form.body.id_for_label }}');
+    const wordCountElement = document.getElementById('wordCount');
+    const currentWordCountElement = document.getElementById('currentWordCount');
+    
+    function updateWordCount() {
+        const text = bodyField.value;
+        const words = text.trim() ? text.trim().split(/\s+/).length : 0;
+        wordCountElement.textContent = `${words} words`;
+        
+        // Update current word count as well
+        currentWordCountElement.textContent = `${words} words`;
+        
+        // Change color based on word count changes
+        const originalWords = {{ form.instance.body|wordcount }};
+        if (words < originalWords) {
+            wordCountElement.className = 'text-red-500 font-medium';
+        } else if (words === originalWords) {
+            wordCountElement.className = 'text-gray-500 font-medium';
+        } else {
+            wordCountElement.className = 'text-green-500 font-medium';
+        }
+    }
+    
+    bodyField.addEventListener('input', updateWordCount);
+    updateWordCount(); // Initial count
+    
+    // Add some interactive effects
+    const inputs = document.querySelectorAll('input, textarea');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('ring-2', 'ring-yellow-200', 'rounded-xl');
+        });
+        
+        input.addEventListener('blur', function() {
+            this.parentElement.classList.remove('ring-2', 'ring-yellow-200', 'rounded-xl');
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+    const editor = document.getElementById('richEditor');
+    const hiddenInput = document.getElementById('{{ form.body.id_for_label }}');
+    
+    // Sync content to hidden input
+    editor.addEventListener('input', function() {
+        hiddenInput.value = this.textContent || this.innerText;
+        
+        // Auto-resize
+        this.style.height = 'auto';
+        this.style.height = Math.min(this.scrollHeight, 384) + 'px';
+    });
+    
+    // Handle placeholder
+    editor.addEventListener('focus', function() {
+        if (this.textContent === this.getAttribute('data-placeholder')) {
+            this.textContent = '';
+        }
+    });
+    
+    editor.addEventListener('blur', function() {
+        if (!this.textContent.trim()) {
+            this.textContent = this.getAttribute('data-placeholder');
+        }
+    });
+    
+    // Initialize
+    if (!editor.textContent.trim()) {
+        editor.textContent = editor.getAttribute('data-placeholder');
+    }
+});
+</script>
+
+<style>
+.min-h-60 {
+    min-height: 15rem;
+}
+
+.resize-y {
+    resize: vertical;
+}
+
+/* Smooth transitions for all interactive elements */
+button, a, input, textarea {
+    transition: all 0.2s ease-in-out;
+}
+
+/* Custom focus styles */
+input:focus, textarea:focus {
+    transform: translateY(-1px);
+}
+</style>
+{% endblock content %}

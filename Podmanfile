@@ -1,0 +1,29 @@
+# 1️⃣ Base image
+FROM python:3.13-slim
+
+# 2️⃣ Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+
+# 3️⃣ Set work directory
+WORKDIR /app
+
+# 4️⃣ Install Poetry
+RUN pip install poetry
+
+# 5️⃣ Copy Poetry files first for dependency caching
+COPY pyproject.toml poetry.lock* /app/
+
+# 6️⃣ Install dependencies (no venv, so Poetry installs globally in container)
+RUN poetry config virtualenvs.create false && poetry install --no-root --only main
+
+# 7️⃣ Copy project files
+COPY . /app
+
+# 8️⃣ Expose port and define command
+EXPOSE 8000
+ENV PYTHONPATH=/app/MyScribe
+CMD ["poetry", "run", "gunicorn", "MyScribe.MyScribe.wsgi:application", "--bind", "0.0.0.0:8000"]
+
+
+

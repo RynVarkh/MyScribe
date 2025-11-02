@@ -1,0 +1,235 @@
+{% extends 'Blogs/base.html' %}
+
+{% block title %}
+    Update Blogs | MyScribe
+{% endblock title %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <!-- Page Header -->
+    <div class="mb-8">
+        <div class="flex items-center justify-between mb-6">
+            <div>
+                <h1 class="text-4xl font-bold text-gray-900 mb-3">Update Your Blogs</h1>
+                <p class="text-lg text-gray-600">
+                    Select a blog post to edit and improve your content
+                </p>
+            </div>
+            <div class="bg-yellow-100 text-yellow-800 px-4 py-2 rounded-lg border border-yellow-200">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-edit"></i>
+                    <span class="font-medium">{{ blogs.count }} blog{{ blogs.count|pluralize }} available</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Total Blogs</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">{{ blogs.count }}</p>
+                    </div>
+                    <div class="bg-blue-100 p-2 rounded-lg">
+                        <i class="fas fa-file-alt text-blue-600"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Latest Post</p>
+                        <p class="text-sm font-semibold text-gray-800 mt-1 truncate">
+                            {% if blogs %}
+                                {{ blogs.0.title|truncatewords:3 }}
+                            {% else %}
+                                No posts
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="bg-green-100 p-2 rounded-lg">
+                        <i class="fas fa-clock text-green-600"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Oldest Post</p>
+                        <p class="text-sm font-semibold text-gray-800 mt-1 truncate">
+                            {% if blogs %}
+                                {{ blogs.last.title|truncatewords:3 }}
+                            {% else %}
+                                No posts
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="bg-purple-100 p-2 rounded-lg">
+                        <i class="fas fa-history text-purple-600"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="bg-white rounded-xl shadow-sm p-4 border border-gray-200">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-gray-500 text-sm font-medium">Ready to Edit</p>
+                        <p class="text-2xl font-bold text-gray-800 mt-1">{{ blogs.count }}</p>
+                    </div>
+                    <div class="bg-yellow-100 p-2 rounded-lg">
+                        <i class="fas fa-edit text-yellow-600"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Blogs List -->
+    <div class="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <!-- List Header -->
+        <div class="bg-gradient-to-r from-yellow-500 to-orange-500 px-6 py-4">
+            <div class="flex items-center justify-between">
+                <h2 class="text-xl font-bold text-white flex items-center space-x-3">
+                    <i class="fas fa-list-ul"></i>
+                    <span>Your Blog Posts</span>
+                </h2>
+                <div class="text-yellow-100 text-sm">
+                    Click "Edit" to modify any post
+                </div>
+            </div>
+        </div>
+
+        <div class="p-6">
+            {% if blogs %}
+                <div class="space-y-3">
+                    {% for blog in blogs %}
+                    <div class="group bg-white border border-gray-200 rounded-xl p-4 hover:shadow-lg hover:border-yellow-300 transition-all duration-300">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-4 flex-1 min-w-0">
+                                <!-- Counter -->
+                                <div class="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm font-medium flex-shrink-0">
+                                    #{{ forloop.counter }}
+                                </div>
+                                
+                                <!-- Blog Info -->
+                                <div class="flex-1 min-w-0">
+                                    <a href="{% url 'Blogs:details' blog.id %}" class="block group-hover:text-blue-600 transition-colors duration-200">
+                                        <h3 class="text-lg font-semibold text-gray-800 truncate">
+                                            {{ blog.title }}
+                                        </h3>
+                                    </a>
+                                    
+                                    <div class="flex items-center space-x-4 mt-1 text-sm text-gray-500">
+                                        <span class="flex items-center space-x-1">
+                                            <i class="far fa-calendar"></i>
+                                            <span>{{ blog.created_at|date:"M d, Y" }}</span>
+                                        </span>
+                                        <span class="flex items-center space-x-1">
+                                            <i class="far fa-clock"></i>
+                                            <span>{{ blog.created_at|timesince }} ago</span>
+                                        </span>
+                                        <span class="flex items-center space-x-1">
+                                            <i class="fas fa-file-word"></i>
+                                            <span>{{ blog.body|wordcount }} words</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div class="flex items-center space-x-3 ml-4 flex-shrink-0">
+                                <a href="{% url 'Blogs:details' blog.id %}" class="bg-blue-100 text-blue-600 hover:bg-blue-200 px-3 py-2 rounded-lg transition-colors duration-200 flex items-center space-x-2 text-sm">
+                                    <i class="fas fa-eye"></i>
+                                    <span class="hidden sm:inline">View</span>
+                                </a>
+                                
+                                <a href="{% url 'Blogs:edit' blog.id %}" class="bg-yellow-500 text-white hover:bg-yellow-600 px-4 py-2 rounded-lg transition-colors duration-200 transform hover:scale-105 shadow-md hover:shadow-lg flex items-center space-x-2 font-medium">
+                                    <i class="fas fa-edit"></i>
+                                    <span>Edit</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <!-- Empty State -->
+                <div class="text-center py-12">
+                    <div class="bg-gray-100 w-20 h-20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-edit text-gray-400 text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-600 mb-2">No Blogs Available</h3>
+                    <p class="text-gray-500 mb-6">You haven't created any blog posts yet.</p>
+                    <a href="{% url 'Blogs:create' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium inline-flex items-center space-x-2 transition-colors duration-200">
+                        <i class="fas fa-plus"></i>
+                        <span>Create Your First Blog</span>
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- List Footer -->
+        {% if blogs %}
+        <div class="bg-gray-50 border-t border-gray-200 px-6 py-4">
+            <div class="flex flex-col sm:flex-row justify-between items-center space-y-2 sm:space-y-0">
+                <p class="text-gray-600 text-sm">
+                    Showing <span class="font-semibold">{{ blogs.count }}</span> blog{{ blogs.count|pluralize }}
+                </p>
+                <div class="flex items-center space-x-4 text-sm text-gray-500">
+                    <span class="flex items-center space-x-1">
+                        <i class="fas fa-info-circle"></i>
+                        <span>Click "Edit" to modify any blog post</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Quick Actions -->
+    {% if blogs %}
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="bg-yellow-50 border border-yellow-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+                <i class="fas fa-lightbulb text-yellow-500"></i>
+                <span>Editing Tips</span>
+            </h3>
+            <ul class="space-y-2 text-sm text-gray-600">
+                <li class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Update outdated information regularly</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Improve readability with formatting</span>
+                </li>
+                <li class="flex items-start space-x-2">
+                    <i class="fas fa-check text-green-500 mt-1"></i>
+                    <span>Add new insights and examples</span>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="bg-blue-50 border border-blue-200 rounded-xl p-6">
+            <h3 class="font-semibold text-gray-800 mb-3 flex items-center space-x-2">
+                <i class="fas fa-rocket text-blue-500"></i>
+                <span>Quick Actions</span>
+            </h3>
+            <div class="space-y-3">
+                <a href="{% url 'Blogs:create' %}" class="w-full bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2 text-sm">
+                    <i class="fas fa-plus"></i>
+                    <span>Create New Blog</span>
+                </a>
+                <a href="{% url 'Blogs:home' %}" class="w-full bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-lg font-medium transition-colors duration-200 flex items-center justify-center space-x-2 text-sm">
+                    <i class="fas fa-th-large"></i>
+                    <span>Back to Dashboard</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyScribe</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    * {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 via-white to-blue-50 text-gray-800">
+
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur border-b border-gray-200 shadow-sm">
+    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+      <!-- Logo -->
+      <div class="flex items-center space-x-3">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-500 p-2 rounded-lg shadow">
+          <i class="fas fa-pen-nib text-white"></i>
+        </div>
+        <span class="text-2xl font-bold text-gray-900 tracking-tight">MyScribe</span>
+      </div>
+
+      <!-- Links -->
+      <div class="flex items-center space-x-5">
+        <a href="{% url 'Auth:login' %}" class="text-gray-700 hover:text-blue-600 font-medium transition-colors">
+          Sign In
+        </a>
+        <a href="{% url 'Auth:register' %}" class="bg-gradient-to-r from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white font-medium py-2.5 px-5 rounded-lg shadow-md transition-all duration-300">
+          Get Started
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="relative overflow-hidden py-24">
+    <!-- Soft background blob -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute -top-40 -left-40 w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse"></div>
+      <div class="absolute -bottom-32 -right-40 w-96 h-96 bg-indigo-200 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-pulse"></div>
+    </div>
+
+    <div class="relative z-10 max-w-3xl mx-auto text-center px-6">
+      <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">
+        Your <span class="bg-gradient-to-r from-blue-600 to-indigo-500 bg-clip-text text-transparent">Personal Writing</span> Space
+      </h1>
+      <p class="text-lg md:text-xl text-gray-600 mb-10 leading-relaxed max-w-2xl mx-auto">
+        A clean and distraction-free platform designed for your thoughts, stories, and reflections. Write with focus — your words matter.
+      </p>
+
+      <div class="flex flex-col sm:flex-row justify-center gap-4">
+        <a href="{% url 'Auth:register' %}" 
+           class="bg-gradient-to-r from-blue-600 to-indigo-500 hover:from-blue-700 hover:to-indigo-600 text-white font-semibold py-3 px-8 rounded-lg shadow-lg transition-transform hover:-translate-y-1">
+          Start Writing
+        </a>
+        <a href="{% url 'Auth:login' %}" 
+           class="border border-gray-300 hover:border-blue-400 text-gray-700 hover:text-blue-600 font-medium py-3 px-8 rounded-lg transition-all">
+          Sign In
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section class="py-20 bg-white border-t border-gray-100">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold text-gray-900 mb-12">Why Write with MyScribe?</h2>
+
+      <div class="grid md:grid-cols-3 gap-10">
+        <div class="p-8 bg-slate-50 rounded-2xl shadow-sm hover:shadow-md transition">
+          <div class="text-blue-600 text-3xl mb-4">
+            <i class="fas fa-feather-alt"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Minimal Interface</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Focus on your words without clutter. Clean, distraction-free editor for pure writing flow.</p>
+        </div>
+
+        <div class="p-8 bg-slate-50 rounded-2xl shadow-sm hover:shadow-md transition">
+          <div class="text-indigo-600 text-3xl mb-4">
+            <i class="fas fa-cloud"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Always Accessible</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Write anywhere, anytime — your notes stay synced and secure in the cloud.</p>
+        </div>
+
+        <div class="p-8 bg-slate-50 rounded-2xl shadow-sm hover:shadow-md transition">
+          <div class="text-blue-600 text-3xl mb-4">
+            <i class="fas fa-lock"></i>
+          </div>
+          <h3 class="text-lg font-semibold text-gray-800 mb-2">Private by Design</h3>
+          <p class="text-gray-600 text-sm leading-relaxed">Your thoughts are yours. MyScribe keeps your data safe and your privacy respected.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white py-12 mt-12">
+    <div class="max-w-6xl mx-auto px-6 text-center">
+      <div class="flex justify-center items-center space-x-3 mb-4">
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-500 p-2 rounded">
+          <i class="fas fa-pen-nib text-white"></i>
+        </div>
+        <span class="text-xl font-semibold">MyScribe</span>
+      </div>
+      <p class="text-gray-400 mb-4">A personal blog platform built for focused writing.</p>
+      <p class="text-gray-500 text-sm">&copy; 2025 MyScribe — Built with passion for words.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

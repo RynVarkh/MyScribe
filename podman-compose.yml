@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Podmanfile 
+    command: gunicorn MyScribe.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - /home/valrik/Documents/sandBox/Django/MyScribe/MyScribe:/app
+    environment:
+      - DJANGO_SETTINGS_MODULE=MyScribe.settings
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  nginx:
+    image: docker.io/library/nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - /home/valrik/Documents/sandBox/Django/MyScribe/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - web

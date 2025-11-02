@@ -1,0 +1,93 @@
+{% extends 'Blogs/base.html' %}
+{% load static %}
+
+{% block title %}Profile | MyScribe{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <!-- Profile Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-100">
+        <div class="profile-gradient bg-gradient-to-r from-blue-500 to-purple-600 py-12 px-8 text-center">
+            <!-- Profile Avatar -->
+            <div class="w-32 h-32 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 backdrop-blur-sm border-4 border-white/30">
+                <i class="fas fa-user text-white text-5xl"></i>
+            </div>
+            
+            <!-- Username -->
+            <h2 class="text-3xl font-bold text-white mb-2">{{ user.username }}</h2>
+        </div>
+
+        <!-- Profile Details -->
+        <div class="p-8">
+            <!-- Email Section -->
+            <div class="mb-8">
+                <div class="flex items-center space-x-3 mb-4">
+                    <div class="bg-blue-100 p-3 rounded-xl">
+                        <i class="fas fa-envelope text-blue-600 text-lg"></i>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-semibold text-gray-500 uppercase tracking-wide mb-1">
+                            Email Address
+                        </label>
+                        <p class="text-lg text-gray-800 font-medium">{{ user.email }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Account Information -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <!-- Member Since -->
+                <div class="bg-gray-50 rounded-xl p-6 border border-gray-200">
+                    <div class="flex items-center space-x-3 mb-3">
+                        <div class="bg-green-100 p-2 rounded-lg">
+                            <i class="fas fa-calendar-check text-green-600"></i>
+                        </div>
+                        <h3 class="font-semibold text-gray-700">Member Since</h3>
+                    </div>
+                    <p class="text-gray-600">{{ user.date_joined|date:"F Y" }}</p>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-gray-200">
+                <!-- Logout Button -->
+                <a href="{% url 'Auth:logout' %}" 
+                   class="flex items-center justify-center space-x-3 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-3 px-6 rounded-xl transition-all duration-300 transform hover:-translate-y-1 hover:shadow-lg shadow-md">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.profile-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* Smooth animations */
+.profile-card {
+    transition: all 0.3s ease;
+}
+
+.profile-card:hover {
+    transform: translateY(-5px);
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Add hover effects to cards
+    const cards = document.querySelectorAll('.bg-white');
+    cards.forEach(card => {
+        card.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        card.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logout | MyScribe</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+        }
+        
+        .logout-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .logout-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: #e9f0ff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .logout-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #4a6cf7;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #2d3748;
+            font-weight: 600;
+        }
+        
+        h2 {
+            font-size: 18px;
+            color: #718096;
+            font-weight: 400;
+            margin-bottom: 30px;
+        }
+        
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 3px;
+            margin: 30px 0;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background: #4a6cf7;
+            border-radius: 3px;
+            animation: progress 3s linear forwards;
+        }
+        
+        @keyframes progress {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        
+        .redirect-text {
+            font-size: 16px;
+            color: #718096;
+            margin-bottom: 20px;
+        }
+        
+        .countdown {
+            font-weight: 600;
+            color: #4a6cf7;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-size: 16px;
+        }
+        
+        .btn-primary {
+            background: #4a6cf7;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #3a5bd9;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(74, 108, 247, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f7fafc;
+            color: #4a5568;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background: #edf2f7;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+        
+        @media (max-width: 480px) {
+            .logout-container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
+            
+            h2 {
+                font-size: 16px;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="logout-container">
+        <div class="logout-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+            </svg>
+        </div>
+        
+        <h1>You Have Been Logged Out</h1>
+        <h2>Thank you for using our service</h2>
+        
+        <div class="progress-container">
+            <div class="progress-bar"></div>
+        </div>
+        
+        <p class="redirect-text">
+            Redirecting to home page in <span class="countdown" id="countdown">3</span> seconds
+        </p>
+    </div>
+
+    <script>
+        // Countdown timer
+        let countdownElement = document.getElementById('countdown');
+        let countdownValue = 3;
+        
+        const countdownInterval = setInterval(() => {
+            countdownValue--;
+            countdownElement.textContent = countdownValue;
+            
+            if (countdownValue <= 0) {
+                clearInterval(countdownInterval);
+                redirectToLanding();
+            }
+        }, 1000);
+        
+        // Redirect functions
+        function redirectNow() {
+            clearInterval(countdownInterval);
+            redirectToLanding();
+        }
+        
+        function redirectToLanding() {
+            // In a real implementation, this would use the Django template URL
+            // window.location.href = "{% url 'Blogs:landing' %}";
+            window.location.href = "{% url 'Blogs:landing' %}";
+        }
+    </script>
+</body>
+</html>
